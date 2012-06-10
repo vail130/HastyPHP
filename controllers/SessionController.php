@@ -71,6 +71,10 @@ class SessionController {
 		return isset($_SESSION['type']) ? $_SESSION['type'] : false;
 	}
 	
+	public static function getUserID() {
+		return (int)$_SESSION['id'];
+	}
+	
 }
 
 ?>

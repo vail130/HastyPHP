@@ -1,12 +1,17 @@
 To Do
 
-- Style form pages
-	- register.php
-	- signin.php
-	- forgotpassword.php
-	- resetpassword.php
+- Test forgot/reset password
 
-- Style header
-- Style footer
+- Add contact page
+- Settings page for signed-in users
+	- Test change password
+	- Add change email address form
+	- Add delete account form
 
-- Test reset password
+- Add basic admin page
+	- See user accounts & info
+	- See user sessions
+	- View unsent system emails
+	- Export all user info with selective fields (ex: all email addresses with names)
+
+- Enhance session system to track multiple sessions

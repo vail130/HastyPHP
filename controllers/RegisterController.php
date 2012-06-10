@@ -10,12 +10,16 @@ class RegisterController {
 		$p2,
 		$ref;
 	
-	public function setParams($name, $email, $p1, $p2, $ref) {
-		$this->name = $name;
-		$this->email = $email;
-		$this->p1 = $p1;
-		$this->p2 = $p2;
-		$this->ref = $ref;
+	public function setParams($params) {
+		if(empty($params)) {
+			return;
+		}
+		
+		foreach($params as $key => $value) {
+			if(isset($this->$key)) {
+				$this->$key = $value;
+			}
+		}
 	}
 	
 	public function setMethod($method) {

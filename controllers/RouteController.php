@@ -57,7 +57,7 @@ class RouteController {
 		
 		if(SessionController::validSession() === true) {
 			// add pages that only valid users can view here
-			$this->availablePages = array_merge($this->availablePages, array('settings', 'signout'));
+			$this->availablePages = array_merge($this->availablePages, array('changepassword', 'settings', 'signout'));
 			
 			if(SessionController::getSessionType() === 'administrator') {
 				// add pages that only the admin can view here
@@ -96,12 +96,15 @@ class RouteController {
 			$regc->setMethod($this->method);
 			
 			if($this->method === 'POST') {
-				$name = isset($_POST['name']) ? $_POST['name'] : '';
-				$email = isset($_POST['email']) ? $_POST['email'] : '';
-				$p1 = isset($_POST['p1']) ? $_POST['p1'] : '';
-				$p2 = isset($_POST['p2']) ? $_POST['p2'] : '';
-				$ref = isset($_POST['ref']) ? $_POST['ref'] : '';
-				$regc->setParams($name, $email, $p1, $p2, $ref);
+				$params =
+					array(
+						'name' => isset($_POST['name']) ? $_POST['name'] : '',
+						'email' => isset($_POST['email']) ? $_POST['email'] : '',
+						'p1' => isset($_POST['p1']) ? $_POST['p1'] : '',
+						'p2' => isset($_POST['p2']) ? $_POST['p2'] : '',
+						'ref' => isset($_POST['ref']) ? $_POST['ref'] : '',
+					);
+				$regc->setParams($params);
 			}
 			else if($this->method === 'GET' && !empty($this->url[1])) {
 				$regc->setRef($this->url[1]);
@@ -130,14 +133,30 @@ class RouteController {
 			$rpc->setMethod($this->method);
 			
 			if($this->method === 'POST') {
-				$code = isset($_POST['code']) ? $_POST['code'] : '';
-				$p1 = isset($_POST['p1']) ? $_POST['p1'] : '';
-				$p2 = isset($_POST['p2']) ? $_POST['p2'] : '';
-				$rpc->setParams($code, $p1, $p2);
+				$params =
+					array(
+						'code' => isset($_POST['code']) ? $_POST['code'] : '',
+						'p1' => isset($_POST['p1']) ? $_POST['p1'] : '',
+						'p2' => isset($_POST['p2']) ? $_POST['p2'] : '',
+					);
+				$rpc->setParams($params);
 			}
 			else if($this->method === 'GET' && !empty($this->url[1])) {
 				$rpc->setCode($this->url[1]);
 			}
+			return $rpc->go();
+		}
+		else if($this->page === 'changepassword' && $this->method === 'POST') {
+			$rpc = new ResetPasswordController();
+			$rpc->setMethod($this->method);
+			
+			$params =
+				array(
+					'op' => isset($_POST['op']) ? $_POST['op'] : '',
+					'p1' => isset($_POST['p1']) ? $_POST['p1'] : '',
+					'p2' => isset($_POST['p2']) ? $_POST['p2'] : '',
+				);
+			$rpc->setParams($params);
 			return $rpc->go();
 		}
 		

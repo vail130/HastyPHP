@@ -49,7 +49,18 @@ class Email extends Module {
 	
 	public
 		$created, $email, $text, $subject, $status, $user_id;
-
+	
+	private
+		$footer =
+"<p>This email was produced automatically by
+<a target='_blank' style='color:black;' href='{$SITE['url']}'>{$SITE['url']}</a> because
+of an action that was taken connected to the account registered to this email address.
+If you are receiving this email in error or you want to remove your
+information from our database, you can go to 
+<a target='_blank' style='color:black;' href='{$SITE['url']}'>{$SITE['url']}</a>,
+sign in to deactivate this account or contact us at
+<a target='_blank' style='color:black;' href='{$SITE['url']}contact'>{$SITE['url']}contact</a>.</p>";
+									
 	public static function createEmail($uID, $type, $params=array()) {
 		global $SITE, $MAIL;
 		
@@ -124,12 +135,9 @@ class Email extends Module {
 			
 			$content =
 				"<p>Dear <span style='background-color:white;color:black;'>{$user->name}</span>,</p>
-				<p>The \"Forgot Password\" form was filled out at <a style='background-color:white;color:black;' href='{$SITE['url']}'>{$SITE['displayName']}</a>
+				<p>The \"Forgot Password\" form was filled out at <a style='background-color:white;color:black;' href='{$SITE['url']}forgotpassword'>{$SITE['url']}forgotpassword</a>
 					with this email address. Follow this link to reset your password:</p>
-				<p><a style='background-color:white;color:black;' href='{$SITE['url']}resetpassword/{$params['code']}'>{$SITE['url']}/resetpassword/{$params['code']}</a></p>
-				<p>If you didn't ask for this email, we really apologize for sending it. Please let us know
-					at <a style='background-color:white;color:black;' href='{$SITE['url']}contact'>{$SITE['url']}contact</a>, and we
-					won't let it happen again.</p>";
+				<p><a style='background-color:white;color:black;' href='{$SITE['url']}resetpassword/{$params['code']}'>{$SITE['url']}/resetpassword/{$params['code']}</a></p>";
 		}
 		else if($type == 'changePassword') {
 			$recipient = $user->email;
@@ -139,10 +147,9 @@ class Email extends Module {
 				"<p>Dear <span style='background-color:white;color:black;'>{$user->name}</span>,</p>
 				<p>Your password for <a style='background-color:white;color:black;' href='{$SITE['url']}'>{$SITE['url']}</a>
 					has been changed. If this was a mistake or someone else did this, you can use the \"Forgot Password\"
-					form, linked to in the Log In form to change it again.</p>
-				<p>If you didn't ask for this email, we really apologize for sending it. Please let us know
-					at <a style='background-color:white;color:black;' href='{$SITE['url']}contact'>{$SITE['url']}contact</a>, and we
-					won't let it happen again.</p>";
+					form  at
+					<a style='background-color:white;color:black;' href='{$SITE['url']}forgotpassword'>{$SITE['url']}forgotpassword</a>
+					to change it again.</p>";
 		}
 		else if($type == 'changeEmail') {
 			if(empty($params['code'])) {
@@ -158,10 +165,7 @@ class Email extends Module {
 					is being updated. If this was a mistake or someone else did this, you can ignore this email,
 					and nothing will happen. If you want this email address to be your new, official one for the site,
 					follow the link below:</p>
-				<p><a style='background-color:white;color:black;' href='{$SITE['url']}request/{$params['code']}'>{$SITE['url']}/request/{$params['code']}</a></p>
-				<p>If you didn't ask for this email, we really apologize for sending it. Please let us know
-					at <a style='background-color:white;color:black;' href='{$SITE['url']}contact'>{$SITE['url']}contact</a>, and we
-					won't let it happen again.</p>";
+				<p><a style='background-color:white;color:black;' href='{$SITE['url']}request/{$params['code']}'>{$SITE['url']}/request/{$params['code']}</a></p>";
 		}
 		
 		$eArray =
@@ -201,8 +205,7 @@ class Email extends Module {
 			return $result;
 		}
 		else {
-			$query = "UPDATE emails SET status='sent' WHERE module_id='{$this->module_id}'";
-			return mysql_query($query);
+			return $this->setRecord('status', 'sent');
 		}
 	}
 	
@@ -241,12 +244,7 @@ class Email extends Module {
 						<tbody>
 						<tr>
 							<td style='color:#aaa;font-family:Arial, sans;'>
-								<p>This email was produced automatically by
-									<a target='_blank' style='color:black;' href='{$SITE['url']}'>{$SITE['displayName']}</a>.
-									If you are receiving this email in error or you want to remove your
-									information from our database, you can go to 
-									<a target='_blank' style='color:black;' href='{$SITE['url']}'>{$SITE['displayName']}</a>,
-									log in and deactivate your account.</p>
+								{$this->footer}
 							</td>
 						</tr>
 						</tbody>
@@ -267,10 +265,7 @@ class Email extends Module {
 		return
 			strip_tags(str_ireplace($find, "\n", stripslashes(stripslashes($this->text))))."\n\n
 			________________________________________________\n
-			This email was produced automatically by {$SITE['url']}.
-			If you are receiving this email in error or you want to remove your
-			information from our database, you can go to 
-			{$SITE['url']}, log in and deactivate your account.\n\n";
+			".strip_tags($this->footer);
 	}
 	
 }
