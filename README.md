@@ -1,3 +1,14 @@
+# Use-Case
+
++ You hate doing the following:
+	* Creating Sign In/Register forms
+	* Creating Forgot/Reset/Change Password systems
+	* Creating HTML email templates, because TABLE, TBODY, TR and TD suck
+	* Setting up Bcrypt, jsmin, cssmin, META tags, and mod_rewrite for the millionth time
+	
++ You want to do the following:
+	* Just work on the freaking project!
+
 # About HastyPHP
 
 The purpose of HastyPHP is to get you up and running as quickly and easily
