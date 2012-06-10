@@ -23,11 +23,10 @@ takes you about 10 minutes to really understand what's going on, and maybe only 
 These are some nice-to-have features that I'll highlight:
 
 + JS minification
-+ Server-size LESS compilation into a CSS file, which is minified
++ Server-side LESS compilation into a CSS file, which is minified
 + Uses Bcrypt for password hashing
 + Most most META tags, including open graph and itemprop (g+) are ready to go
-+ Already includes a few helpful JS and PHP libraries
-+ Full functionality without any JavaScript
++ Full functionality without any JavaScript, but it includes a few helpful JS and PHP libraries
 
 # Getting Started
 
