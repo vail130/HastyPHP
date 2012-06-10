@@ -1,0 +1,12 @@
+To Do
+
+- Style form pages
+	- register.php
+	- signin.php
+	- forgotpassword.php
+	- resetpassword.php
+
+- Style header
+- Style footer
+
+- Test reset password

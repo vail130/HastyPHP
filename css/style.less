@@ -1,0 +1,187 @@
+/* #Site-Wide CSS
+================================================== */
+
+	html, body { background: url(../img/xlight_fabric.jpg) top left repeat; }
+	
+	img { border: 0; }
+		
+	#debug { display: none; position: fixed; top: 0; left: 0; padding: 10px; background-color: yellow; z-index: 99999999999; }
+	#shadow {
+		display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+		z-index: 1001; background: url(../img/bg_black_30_1x1.png) top left repeat;
+	}
+	
+	.box-shadow(@x: 0, @y: 0, @blur: 0, @spread: 0, @color: rgba(0, 0, 0, .5), @set: inset) when (@set = inset) {
+		-webkit-box-shadow: @arguments;
+		-moz-box-shadow: @arguments;
+		-o-box-shadow: @arguments;
+		-ms-box-shadow: @arguments;
+		-khtml-box-shadow: @arguments;
+		box-shadow: @arguments;
+	}
+	.box-shadow(@x: 0, @y: 0, @blur: 0, @spread: 0, @color: rgba(0, 0, 0, .5)) {
+		-webkit-box-shadow: @arguments;
+		-moz-box-shadow: @arguments;
+		-o-box-shadow: @arguments;
+		-ms-box-shadow: @arguments;
+		-khtml-box-shadow: @arguments;
+		box-shadow: @arguments;
+	}
+	
+	.transform(@options) {
+		-webkit-transform: @arguments;
+		-moz-transform: @arguments;
+		-o-transform: @arguments;
+		-ms-transform: @arguments;
+		-khtml-transform: @arguments;
+		transform: @arguments;
+	}
+	
+	.linear-gradient(@start, @end) {
+		background-color: @end;
+		background-image: -webkit-gradient(linear, left top, left bottom, from(@start), to(@end));
+		background-image: -webkit-linear-gradient(top, @start, @end);
+		background-image: -moz-linear-gradient(top, @start, @end);
+		background-image: -ms-linear-gradient(top, @start, @end);
+		background-image: -o-linear-gradient(top, @start, @end);
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=@start, endColorstr=@end);
+	}
+	
+	.border-top-left-radius(@radius: 5px) {
+		-webkit-border-top-left-radius: @arguments;
+		-moz-border-radius-topleft: @arguments;
+		-o-border-top-left-radius: @arguments;
+		-ms-border-top-left-radius: @arguments;
+		-khtml-border-top-left-radius: @arguments;
+		border-top-left-radius: @arguments;
+	}
+	.border-top-right-radius(@radius: 5px) {
+		-webkit-border-top-right-radius: @arguments;
+		-moz-border-radius-topright: @arguments;
+		-o-border-top-right-radius: @arguments;
+		-ms-border-top-right-radius: @arguments;
+		-khtml-border-top-right-radius: @arguments;
+		border-top-right-radius: @arguments;
+	}
+	.border-top-radius(@radius: 5px) {
+		.border-top-left-radius(@radius);
+		.border-top-right-radius(@radius);
+	}
+	.border-bottom-left-radius(@radius: 5px) {
+		-webkit-border-bottom-left-radius: @arguments;
+		-moz-border-radius-bottomleft: @arguments;
+		-o-border-bottom-left-radius: @arguments;
+		-ms-border-bottom-left-radius: @arguments;
+		-khtml-border-bottom-left-radius: @arguments;
+		border-bottom-left-radius: @arguments;
+	}
+	.border-bottom-right-radius(@radius: 5px) {
+		-webkit-border-bottom-right-radius: @arguments;
+		-moz-border-radius-bottomright: @arguments;
+		-o-border-bottom-right-radius: @arguments;
+		-ms-border-bottom-right-radius: @arguments;
+		-khtml-border-bottom-right-radius: @arguments;
+		border-bottom-right-radius: @arguments;
+	}
+	.border-bottom-radius(@radius: 5px) {
+		.border-bottom-left-radius(@radius);
+		.border-bottom-right-radius(@radius);
+	}
+	.border-left-radius(@radius: 5px) {
+		.border-top-left-radius(@radius);
+		.border-bottom-left-radius(@radius);
+	}
+	.border-right-radius(@radius: 5px) {
+		.border-top-right-radius(@radius);
+		.border-bottom-right-radius(@radius);
+	}
+	.border-radius(@radius: 5px) {
+		.border-top-radius(@radius);
+		.border-bottom-radius(@radius);
+	}
+	
+	.curled-shadow { position: relative; width: 90%;
+		.box-shadow(0, 0, 4px, 0, rgba(0, 0, 0, 0.2));
+	}
+	.curled-shadow:before,
+	.curled-shadow:after {
+		content: ""; position: absolute; bottom: 7px; left: 0px;
+		width: 40%; height: 10px; max-width: 300px; z-index: -1;
+		.box-shadow(0, 6px, 12px, 0, rgba(0, 0, 0, 0.3));
+		.transform(skew(-2deg) rotate(-2deg));
+	}
+	.curled-shadow:after{
+		right: 0px; left: auto;
+		.transform(skew(2deg) rotate(2deg));
+	}
+	
+	.fullRow { display: block; float: left; width: 100%; }
+	
+	.flashMessage { text-align: center; margin-bottom: 30px; }
+		
+/* #Page CSS
+================================================== */
+	
+	.lead-list {
+		padding-left: 30px;
+		
+		li {
+			margin-bottom: 2px;
+			font-size: 16px;
+			font-weight: 200;
+			line-height: 20px;
+		}
+	}
+	
+	
+/* #Media Queries
+================================================== */
+
+	/* Bigger than standard 960 (devices and browsers) */
+	@media only screen and (min-width: 960px) {
+		
+	}
+
+	/* Smaller than standard 960 (devices and browsers) */
+	@media only screen and (max-width: 959px) {
+		
+	}
+
+	/* Tablet Portrait size to standard 960 (devices and browsers) */
+	@media only screen and (min-width: 768px) and (max-width: 959px) {
+		
+	}
+
+	/* All Mobile Sizes (devices and browser) */
+	@media only screen and (max-width: 767px) {
+		
+	}
+
+	/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+	@media only screen and (min-width: 480px) and (max-width: 767px) {
+		
+	}
+
+	/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+	@media only screen and (max-width: 479px) {
+		
+	}
+
+/* #Font-Face
+================================================== */
+/* 	This is the proper syntax for an @font-face file
+		Just create a "fonts" folder at the root,
+		copy your FontName into code below and remove
+		comment brackets */
+
+/*	@font-face {
+	    font-family: 'FontName';
+	    src: url('../fonts/FontName.eot');
+	    src: url('../fonts/FontName.eot?iefix') format('eot'),
+	         url('../fonts/FontName.woff') format('woff'),
+	         url('../fonts/FontName.ttf') format('truetype'),
+	         url('../fonts/FontName.svg#webfontZam02nTh') format('svg');
+	    font-weight: normal;
+	    font-style: normal; }
+*/
+
