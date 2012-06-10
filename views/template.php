@@ -103,9 +103,9 @@
 						if($SESSION === true) {
 						?>
 						<li class='dropdown'>
-							<a href='#' class='dropdown-toggle' data-toggle='account'>Account<b class='caret'></b></a>
+							<a id='accountLink' href='<? echo $SITE['url']; ?>settings' class='dropdown-toggle' data-toggle='account'>Account<b class='caret'></b></a>
 							<ul class='dropdown-menu'>
-								<li><a id='settingsLink' href='<? echo $SITE['url']; ?>settings'>Settings</a></li>
+								<li><a href='<? echo $SITE['url']; ?>settings'>Settings</a></li>
 								<?
 								if(SessionController::getSessionType() === 'administrator') {
 								?>
