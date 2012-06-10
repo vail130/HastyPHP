@@ -52,15 +52,6 @@ CREATE TABLE users
 	PRIMARY KEY	(module_id)
 );
 
-CREATE TABLE userguides
-(
-	module_id			INT UNSIGNED NOT NULL AUTO_INCREMENT,		#
-	user_id				INT UNSIGNED NOT NULL,						#
-	guide_id			INT UNSIGNED NOT NULL,						#
-	created				INT UNSIGNED NOT NULL,						#
-	PRIMARY KEY (module_id)
-);
-
 CREATE TABLE referredusers
 (
 	module_id			INT UNSIGNED NOT NULL AUTO_INCREMENT,		#
