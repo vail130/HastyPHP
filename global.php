@@ -13,7 +13,7 @@ $SITE['path'] = "/server-path-to-files/{$SITE['name']}/";
 # Local
 #
 $SITE['url'] = "http://localhost/{$SITE['name']}/";
-$SITE['path'] = "/Users/vailgold/Dropbox/{$SITE['name']}/";
+$SITE['path'] = "/local-path-to-files/{$SITE['name']}/";
 
 $SITE['displayName'] = $SITE['name'];
 $SITE['tagLine'] = '';

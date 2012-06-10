@@ -53,7 +53,7 @@ class RouteController {
 		global $SITE;
 		
 		// add pages viewable by everyone, always here
-		$this->availablePages = array('request', 'about', 'privacy', 'tos');
+		$this->availablePages = array('request', 'contact'); #, 'about', 'privacy', 'tos');
 		
 		if(SessionController::validSession() === true) {
 			// add pages that only valid users can view here
@@ -158,6 +158,21 @@ class RouteController {
 				);
 			$rpc->setParams($params);
 			return $rpc->go();
+		}
+		else if($this->page === 'contact' && $this->method === 'POST') {
+			/*
+			$cc = new ContactController();
+			
+			$params =
+				array(
+					'user_id' => SessionController::validSession() ? SessionController::getUserID() : '',
+					'name' => isset($_POST['name']) ? $_POST['name'] : '',
+					'email' => isset($_POST['email']) ? $_POST['email'] : '',
+					'message' => isset($_POST['message']) ? $_POST['message'] : '',
+				);
+			$cc->setParams($params);
+			return $cc->go();
+			*/
 		}
 		
 		return null;

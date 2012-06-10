@@ -2,7 +2,11 @@ To Do
 
 - Test forgot/reset password
 
-- Add contact page
+- Contact
+	- Link to contact page
+		- Perhaps from site-wide footer
+	- ContactController
+
 - Settings page for signed-in users
 	- Test change password
 	- Add change email address form

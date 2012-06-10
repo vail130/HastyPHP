@@ -50,16 +50,17 @@ class Email extends Module {
 	public
 		$created, $email, $text, $subject, $status, $user_id;
 	
-	private
-		$footer =
-"<p>This email was produced automatically by
-<a target='_blank' style='color:black;' href='{$SITE['url']}'>{$SITE['url']}</a> because
-of an action that was taken connected to the account registered to this email address.
-If you are receiving this email in error or you want to remove your
-information from our database, you can go to 
-<a target='_blank' style='color:black;' href='{$SITE['url']}'>{$SITE['url']}</a>,
-sign in to deactivate this account or contact us at
-<a target='_blank' style='color:black;' href='{$SITE['url']}contact'>{$SITE['url']}contact</a>.</p>";
+	private function getFooter() {
+		return
+			"<p>This email was produced automatically by
+			<a target='_blank' style='color:black;' href='{$SITE['url']}'>{$SITE['url']}</a> because
+			of an action that was taken connected to the account registered to this email address.
+			If you are receiving this email in error or you want to remove your
+			information from our database, you can go to 
+			<a target='_blank' style='color:black;' href='{$SITE['url']}'>{$SITE['url']}</a>,
+			sign in to deactivate this account or contact us at
+			<a target='_blank' style='color:black;' href='{$SITE['url']}contact'>{$SITE['url']}contact</a>.</p>";
+	}
 									
 	public static function createEmail($uID, $type, $params=array()) {
 		global $SITE, $MAIL;
@@ -244,7 +245,7 @@ sign in to deactivate this account or contact us at
 						<tbody>
 						<tr>
 							<td style='color:#aaa;font-family:Arial, sans;'>
-								{$this->footer}
+								{$this->getFooter()}
 							</td>
 						</tr>
 						</tbody>
@@ -265,7 +266,7 @@ sign in to deactivate this account or contact us at
 		return
 			strip_tags(str_ireplace($find, "\n", stripslashes(stripslashes($this->text))))."\n\n
 			________________________________________________\n
-			".strip_tags($this->footer);
+			".strip_tags($this->getFooter());
 	}
 	
 }
