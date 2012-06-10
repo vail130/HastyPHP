@@ -66,7 +66,7 @@ class RouteController {
 		}
 		else {
 			// add pages that can only be viewed when there is no session here
-			$this->availablePages = array_merge($this->availablePages, array('register', 'signin', 'forgotpassword'));
+			$this->availablePages = array_merge($this->availablePages, array('register', 'signin', 'forgotpassword', 'resetpassword'));
 		}
 		
 		if(empty($this->url[0])) {
