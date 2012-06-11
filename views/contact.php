@@ -37,6 +37,12 @@
 				</div>
 			</div>
 			<div class="control-group">
+				<label class="control-label" for="subject">Subject</label>
+				<div class="controls">
+					<input type="text" class="input-xlarge" name='subject' id="subject" value='<? echo !empty($_SESSION['flash']['subject']) ? $_SESSION['flash']['subject'] : ''; ?>' />
+				</div>
+			</div>
+			<div class="control-group">
 				<label class="control-label" for="message">Message</label>
 				<div class="controls">
 					<textarea class="input-xlarge" rows='5' name='message' id="message"><? echo !empty($_SESSION['flash']['message']) ? $_SESSION['flash']['message'] : ''; ?></textarea>

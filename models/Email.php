@@ -97,7 +97,7 @@ class Email extends Module {
 					<li>Time: ".date("g:ia, m/j/Y", $user->created)."</li>
 				</ul>";
 		}
-		else if($type == 'newContact') {
+		else if($type == 'contact') {
 			$recipient = $params['email'];
 			$subject = 'Confirmation of Feedback';
 			
@@ -108,7 +108,8 @@ class Email extends Module {
 					uesrs better, so if you think of anything else you want to let us know, please
 					feel free.</p>
 				<h3>You said:</h3>
-				<p>{$params['text']}</p>";
+				<h5>{$params['subject']}</h5>
+				<p>{$params['message']}</p>";
 		}
 		else if($type == 'contactAdmin') {
 			$recipient = $MAIL['contact'];
@@ -119,11 +120,12 @@ class Email extends Module {
 				<p>A new contact has been submitted to the database:</p>
 				<ul>
 					<li>Contact ID: {$params['cID']}</li>
-					<li>Time: ".date("g:ia, m/j/Y", $params['datetime'])."</li>
+					<li>Time: ".date("g:ia, m/j/Y", $params['created'])."</li>
 					<li>Name: {$params['name']}</li>
 					<li>Email Address: {$params['email']}</li>
 					<li>User ID: ".($uID == 0 ? 'No user account' : $uID)."</li>
-					<li>Message:<br/>{$params['text']}</li>
+					<li>Subject: {$params['subject']}</li>
+					<li>Message:<br/>{$params['message']}</li>
 				</ul>";
 		}
 		else if($type == 'forgotPassword') {

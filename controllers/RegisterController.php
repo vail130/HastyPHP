@@ -1,6 +1,6 @@
 <?PHP
 
-class RegisterController {
+class RegisterController extends Controller {
 	
 	private
 		$method,
@@ -9,18 +9,6 @@ class RegisterController {
 		$p1,
 		$p2,
 		$ref;
-	
-	public function setParams($params) {
-		if(empty($params)) {
-			return;
-		}
-		
-		foreach($params as $key => $value) {
-			if(isset($this->$key)) {
-				$this->$key = $value;
-			}
-		}
-	}
 	
 	public function setMethod($method) {
 		$this->method = $method;

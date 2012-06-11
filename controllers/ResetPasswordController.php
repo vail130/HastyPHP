@@ -1,6 +1,6 @@
 <?PHP
 
-class ResetPasswordController {
+class ResetPasswordController extends Controller {
 	
 	private
 		$method,
@@ -8,18 +8,6 @@ class ResetPasswordController {
 		$op,
 		$p1,
 		$p2;
-	
-	public function setParams($params) {
-		if(empty($params)) {
-			return;
-		}
-		
-		foreach($params as $key => $value) {
-			if(isset($this->$key)) {
-				$this->$key = $value;
-			}
-		}
-	}
 	
 	public function setMethod($method) {
 		$this->method = $method;

@@ -49,7 +49,7 @@ class Contact extends Module {
 		$created, $name, $email, $text, $subject, $user_id;
 
 	
-	public static function createContact($name, $email, $subject, $text, $uID) {
+	public static function createContact($name, $email, $subject, $text, $uID=0) {
 		global $SITE;
 		
 		if(empty($name) || empty($text)) {

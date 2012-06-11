@@ -93,11 +93,11 @@ class RouteController {
 		}
 		else if($this->page === 'register') {
 			$regc = new RegisterController();
-			$regc->setMethod($this->method);
 			
 			if($this->method === 'POST') {
 				$params =
 					array(
+						'method' => $this->method,
 						'name' => isset($_POST['name']) ? $_POST['name'] : '',
 						'email' => isset($_POST['email']) ? $_POST['email'] : '',
 						'p1' => isset($_POST['p1']) ? $_POST['p1'] : '',
@@ -130,11 +130,11 @@ class RouteController {
 		}
 		else if($this->page === 'resetpassword') {
 			$rpc = new ResetPasswordController();
-			$rpc->setMethod($this->method);
 			
 			if($this->method === 'POST') {
 				$params =
 					array(
+						'method' => $this->method,
 						'code' => isset($_POST['code']) ? $_POST['code'] : '',
 						'p1' => isset($_POST['p1']) ? $_POST['p1'] : '',
 						'p2' => isset($_POST['p2']) ? $_POST['p2'] : '',
@@ -148,10 +148,10 @@ class RouteController {
 		}
 		else if($this->page === 'changepassword' && $this->method === 'POST') {
 			$rpc = new ResetPasswordController();
-			$rpc->setMethod($this->method);
 			
 			$params =
 				array(
+					'method' => $this->method,
 					'op' => isset($_POST['op']) ? $_POST['op'] : '',
 					'p1' => isset($_POST['p1']) ? $_POST['p1'] : '',
 					'p2' => isset($_POST['p2']) ? $_POST['p2'] : '',
@@ -160,19 +160,18 @@ class RouteController {
 			return $rpc->go();
 		}
 		else if($this->page === 'contact' && $this->method === 'POST') {
-			/*
 			$cc = new ContactController();
 			
 			$params =
 				array(
-					'user_id' => SessionController::validSession() ? SessionController::getUserID() : '',
 					'name' => isset($_POST['name']) ? $_POST['name'] : '',
 					'email' => isset($_POST['email']) ? $_POST['email'] : '',
+					'subject' => isset($_POST['subject']) ? $_POST['subject'] : '',
 					'message' => isset($_POST['message']) ? $_POST['message'] : '',
+					'user_id' => SessionController::validSession() ? SessionController::getUserID() : 0,
 				);
 			$cc->setParams($params);
 			return $cc->go();
-			*/
 		}
 		
 		return null;
