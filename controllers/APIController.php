@@ -3,6 +3,7 @@
 class APIController {
 
   public function process($method, $params) {
+    global $SETTINGS;
 
     $pCount = count($params);
     if (stripos($params[$pCount - 1], '?') !== false) {
@@ -212,39 +213,12 @@ class APIController {
       if(empty($params[1])) {
         switch ($method) {
           case 'get':
-
-            if(isset($_GET['forgotpassword']) && !empty($_GET['email'])) {
-              $user_id = User::getUserIDByEmail(urldecode($_GET['email']));
-              if($user_id === false) {
-                $this->serve(400, json_encode(array('email' => 'Invalid email address.')));
-              }
-
-              $user = new User($user_id);
-              $email = new Email();
-              $result = $email->createRecord($user, 'forgotpassword');
-              if(get_class($result) !== 'Email') {
-                $this->serve(400, json_encode(array('email' => $result)));
-              }
-
-              $result = $email->sendMail();
-              if(get_class($result) !== 'Email') {
-                $this->serve(400, json_encode(array('email' => $result)));
-              }
-
-              $this->serve(200);
-
-            } else {
-              if(!$validSession) {
-                $this->serve(401);
-              }
-
-              $user = new User(SessionController::getSessionID());
-              if(!$user->isAdmin()) {
-                $this->serve(401);
-              }
-
-              $this->serve(200, json_encode(User::getRecords()));
+            $admin = new User(SessionController::getSessionID());
+            if(!$admin->isAdmin()) {
+              $this->serve(401);
             }
+
+            $this->serve(200, json_encode(User::getRecords()));
             break;
 
           case 'post':
@@ -271,10 +245,6 @@ class APIController {
 
       # URL/api/accounts/:id
       else {
-        if(!$validSession) {
-          $this->serve(401);
-        }
-
         if(!$user->isValidID($params[1])) {
           $this->serve(404);
         }
@@ -287,12 +257,30 @@ class APIController {
             break;
 
           case 'get':
-            $this->serve(200, json_encode($user->getRecord()));
+            # Verify email address
+            if(!empty($_GET['request_id']) && !empty($_GET['code'])) {
+              $result = $user->updateRecord(array(
+                'request_id' => (int)$_GET['request_id'],
+                'code' => $_GET['code'],
+              ));
+
+              if(get_class($result) !== 'User') {
+                $this->serve(400, json_encode(array("user" => $result)));
+              }
+
+              $this->serve(302, array('url' => $SETTINGS['BASE_URL']));
+            }
+            # Get user information
+            else {
+              if(!$validSession) {
+                $this->serve(401);
+              }
+              $this->serve(200, json_encode($user->getRecord()));
+            }
             break;
 
           case 'put':
-            $admin = new User(SessionController::getSessionID());
-            if(!$admin->isAdmin()) {
+            if(!$validSession) {
               $this->serve(401);
             }
 
@@ -392,15 +380,20 @@ class APIController {
 
   private function serve($status, $data=null) {
     header(' ', true, $status);
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
-    header('Access-Control-Expose-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
-    header('Access-Control-Allow-Headers: origin, content-type, accept');
-    header('Access-Control-Max-Age: 3600');
-    header('Content-type: application/json');
-    header('Cache-Control: max-age=3600, must-revalidate, private');
-    if($data !== null) {
-      echo $data;
+
+    if($status === 302 && isset($data['url'])) {
+      header('Location: '.$data['url']);
+    } else {
+      header('Access-Control-Allow-Origin: *');
+      header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
+      header('Access-Control-Expose-Methods: GET, POST, PUT, DELETE, OPTIONS, HEAD');
+      header('Access-Control-Allow-Headers: origin, content-type, accept');
+      header('Access-Control-Max-Age: 3600');
+      header('Content-type: application/json');
+      header('Cache-Control: max-age=3600, must-revalidate, private');
+      if($data !== null) {
+        echo $data;
+      }
     }
     exit;
   }

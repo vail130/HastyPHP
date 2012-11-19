@@ -186,7 +186,21 @@ class Model {
     $query = "SELECT id FROM {$this->table} WHERE id='$id' LIMIT 1";
     return mysql_num_rows(mysql_query($query)) === 1;
   }
-  
+
+  public static function createHashAndSaltFromInput($p) {
+    $bcrypt = new Bcrypt(15);
+    $cryptArray = $bcrypt->createHashAndSaltFromInput($p);
+    $hash = $cryptArray['hash'];
+    $salt = $cryptArray['salt'];
+    return $bcrypt->verify($p, $salt, $hash) === true ? $cryptArray : false;
+  }
+
+  public static function getHashFromInputAndSalt($p, $salt) {
+    $bcrypt = new Bcrypt(15);
+    $hash = $bcrypt->getHashFromInputAndSalt($p, $salt);
+    return $bcrypt->verifyInputAndSaltWithHash($p, $salt, $hash) === true ? $hash : false;
+  }
+
   public static function formatTimeAgo($timestamp) {
     $minute = 60;
     $hour = $minute*60;
@@ -240,5 +254,3 @@ class Model {
     return $output;
   }
 }
-
-?>

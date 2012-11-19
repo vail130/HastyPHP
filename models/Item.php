@@ -198,7 +198,7 @@ class Item extends Model {
     }
   }
 
-  public static function getRecords($validSession) {
+  public static function getRecords() {
     $query = "SELECT * FROM items";
 
     $select = mysql_query($query);

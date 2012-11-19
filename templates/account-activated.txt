@@ -1,0 +1,9 @@
+﻿Dear #Username#,\n
+\n
+Welcome to #SiteName#.\n
+\n
+Your email address has been verified. You may now log in and get started.\n
+\n
+#BaseURL#\n
+\n
+Thank you!

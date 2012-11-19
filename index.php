@@ -9,5 +9,3 @@ $rc = new RouteController();
 $rc->route();
 
 $dc->terminate($LINK);
-
-?>

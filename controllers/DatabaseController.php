@@ -4,9 +4,9 @@ class DatabaseController {
 	
 	# Initalize the database connection
 	public function initialize() {
-		global $SITE;
-		$l = mysql_connect($SITE['dbhost'], $SITE['dbuser'], $SITE['dbpass']) or die("Error: ".mysql_error()); 
-		mysql_select_db($SITE['dbname']) or die("Error: ".mysql_error());
+		global $SETTINGS;
+		$l = mysql_connect($SETTINGS['DATABASE_HOST'], $SETTINGS['DATABASE_USER'], $SETTINGS['DATABASE_PASSWORD']) or die("Error: ".mysql_error());
+		mysql_select_db($SETTINGS['DATABASE_NAME']) or die("Error: ".mysql_error());
 		session_start();
 		header("Cache-control: private");
 		return $l;

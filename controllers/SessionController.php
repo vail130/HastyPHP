@@ -7,24 +7,24 @@ class SessionController {
   }
 
   public static function createSession($attributes) {
-    if(empty($attributes['email'])) {
+    if(empty($attributes['username'])) {
       return "Missing email address.";
     }
     if(empty($attributes['password'])) {
       return "Missing password.";
     }
 
-    $uID = User::getUserIDByEmail($attributes['email']);
+    $uID = User::getUserIDByUsername($attributes['username']);
     if($uID === false) {
       return "Invalid user name.";
     }
 
     $user = new User($uID);
-    if($user->get('type') !== 'administrator' && $user->get('status') !== 'approved') {
+    if($user->get('type') !== 'administrator' && $user->get('status') !== 'active') {
       return "Unauthorized account.";
     }
 
-    $hash = User::getHashFromInputAndSalt($attributes['password'], $user->get('salt'));
+    $hash = Model::getHashFromInputAndSalt($attributes['password'], $user->get('salt'));
     if($user->get('hash') !== $hash) {
       return "Invalid password.";
     }
@@ -33,6 +33,7 @@ class SessionController {
     session_destroy();
     session_start();
     $_SESSION['id'] = (int)$user->get('id');
+    $_SESSION['username'] = $user->get('username');
     $_SESSION['email'] = $user->get('email');
     $_SESSION['type'] = $user->get('type');
     return true;

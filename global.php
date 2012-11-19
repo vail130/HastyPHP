@@ -1,57 +1,59 @@
 <?PHP
 
-global $SITE, $MAIL, $DEPLOYED;
+global $SETTINGS;
 
-$DEPLOYED = false;
+$SETTINGS['SITE_NAME'] = 'HastyPHP';
 
-$deployment = 'local';
+$SETTINGS['DEPLOYMENT'] = 'local';
 
-switch($deployment) {
+switch($SETTINGS['DEPLOYMENT']) {
   case 'web':
-    $SITE['url'] = "";
-    $SITE['path'] = "";
-    $SITE['dbhost'] = '';
+    $SETTINGS['BASE_URL'] = "";
+    $SETTINGS['PATH'] = "";
+    $SETTINGS['DATABASE_HOST'] = '';
     break;
 
   case 'local':
-    $SITE['url'] = "http://localhost:8888/";
-    $SITE['path'] = "";
-    $SITE['dbhost'] = 'localhost';
+    $SETTINGS['BASE_URL'] = "http://localhost:8888/";
+    $SETTINGS['PATH'] = "";
+    $SETTINGS['DATABASE_HOST'] = 'localhost';
     break;
 }
 
-$SITE['libPath'] = $SITE['path'].'php-lib/';
-$SITE['models'] = $SITE['path'].'models/';
-$SITE['controllers'] = $SITE['path'].'controllers/';
-$SITE['index'] = $SITE['path'].'index.html';
+$SETTINGS['INDEX'] = "{$SETTINGS['PATH']}app.php";
 
 date_default_timezone_set('America/New_York');
 
-$SITE['dbname'] = '';
-$SITE['dbuser'] = '';
-$SITE['dbpass'] = '';
+$SETTINGS['ADMIN_CODE'] = '';
 
-$MAIL['secure'] = '';
-$MAIL['host'] = '';
-$MAIL['port'] = '';
-$MAIL['user'] = '';
-$MAIL['pass'] = '';
-$MAIL['from'] = '';
-$MAIL['fromName'] = "";
+$SETTINGS['DATABASE_NAME'] = '';
+$SETTINGS['DATABASE_USER'] = '';
+$SETTINGS['DATABASE_PASSWORD'] = '';
 
-require($SITE['libPath'].'phpMailer/class.phpmailer.php');
-require($SITE['libPath'].'WideImage/WideImage.php');
+$SETTINGS['EMAIL_SECURITY'] = '';
+$SETTINGS['EMAIL_HOST'] = '';
+$SETTINGS['EMAIL_POST'] = '';
+$SETTINGS['EMAIL_USER'] = '';
+$SETTINGS['EMAIL_PASSWORD'] = '';
+$SETTINGS['EMAIL_FROM'] = '';
+$SETTINGS['EMAIL_FROM_NAME'] = "";
 
-require($SITE['controllers'].'RouteController.php');
-require($SITE['controllers'].'APIController.php');
-require($SITE['controllers'].'DatabaseController.php');
-require($SITE['controllers'].'SessionController.php');
+require("{$SETTINGS['PATH']}php-lib/phpMailer/class.phpmailer.php");
+require("{$SETTINGS['PATH']}php-lib/WideImage/WideImage.php");
+require("{$SETTINGS['PATH']}php-lib/lessc.inc.php");
+require("{$SETTINGS['PATH']}php-lib/cssmin.php");
+require("{$SETTINGS['PATH']}php-lib/jsmin.php");
+require("{$SETTINGS['PATH']}php-lib/Bcrypt.php");
 
-require($SITE['models'].'Model.php');
-require($SITE['models'].'Email.php');
-require($SITE['models'].'User.php');
-require($SITE['models'].'Item.php');
-require($SITE['models'].'ItemTag.php');
-require($SITE['models'].'ItemImage.php');
+require("{$SETTINGS['PATH']}controllers/RouteController.php");
+require("{$SETTINGS['PATH']}controllers/APIController.php");
+require("{$SETTINGS['PATH']}controllers/DatabaseController.php");
+require("{$SETTINGS['PATH']}controllers/SessionController.php");
 
-?>
+require("{$SETTINGS['PATH']}models/Model.php");
+require("{$SETTINGS['PATH']}models/Email.php");
+require("{$SETTINGS['PATH']}models/User.php");
+require("{$SETTINGS['PATH']}models/UserRequest.php");
+require("{$SETTINGS['PATH']}models/Item.php");
+require("{$SETTINGS['PATH']}models/ItemTag.php");
+require("{$SETTINGS['PATH']}models/ItemImage.php");

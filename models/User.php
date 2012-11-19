@@ -7,19 +7,22 @@ class User extends Model {
     $table = 'users',
     $fields = array(
       'id' => array('type' => 'int'),
-      'email' => array('type' => 'string', 'min' => 1),
-      'firstname' => array('type' => 'string', 'max' => 100, 'min' => 1),
-      'lastname' => array('type' => 'string', 'max' => 100, 'min' => 1),
-      'organization' => array('type' => 'string', 'max' => 100, 'min' => 1),
-      'street_1' => array('type' => 'string', 'max' => 100, 'min' => 0),
-      'street_2' => array('type' => 'string', 'max' => 100, 'min' => 0),
-      'city' => array('type' => 'string', 'max' => 100, 'min' => 0),
-      'state' => array('type' => 'string', 'max' => 100, 'min' => 0),
-      'zip' => array('type' => 'string', 'max' => 20, 'min' => 0),
+      'username' => array('type' => 'string', 'min' => 4),
+      'email' => array('type' => 'string', 'min' => 5),
       'hash' => array('type' => 'string'),
       'salt' => array('type' => 'string'),
-      'type' => array('type' => 'string', 'max' => 20, 'min' => 0, 'options' => array('administrator', 'user')),
-      'status' => array('type' => 'string', 'max' => 20, 'min' => 0, 'options' => array('pending', 'approved', 'ignored')),
+      'type' => array('type' => 'string', 'options' => array('administrator', 'user')),
+      'status' => array('type' => 'string', 'options' => array('pending', 'active', 'deleted')),
+
+      'first_name' => array('type' => 'string', 'max' => 100),
+      'last_name' => array('type' => 'string', 'max' => 100),
+      'organization' => array('type' => 'string', 'max' => 100),
+      'street_1' => array('type' => 'string', 'max' => 100),
+      'street_2' => array('type' => 'string', 'max' => 100),
+      'city' => array('type' => 'string', 'max' => 100),
+      'state' => array('type' => 'string', 'max' => 100),
+      'zip' => array('type' => 'string', 'max' => 50),
+      'phone' => array('type' => 'string', 'max' => 50),
       'updated' => array('type' => 'int'),
       'created' => array('type' => 'int'),
     );
@@ -41,15 +44,17 @@ class User extends Model {
   public function getRecord() {
     return array(
       'id' => $this->get('id'),
+      'username' => $this->get('username'),
       'email' => $this->get('email'),
-      'firstname' => $this->get('firstname'),
-      'lastname' => $this->get('lastname'),
+      'first_name' => $this->get('first_name'),
+      'last_name' => $this->get('last_name'),
       'organization' => $this->get('organization'),
       'street_1' => $this->get('street_1'),
       'street_2' => $this->get('street_2'),
       'city' => $this->get('city'),
       'state' => $this->get('state'),
       'zip' => $this->get('zip'),
+      'phone' => $this->get('phone'),
       'type' => $this->get('type'),
       'status' => $this->get('status'),
       'updated' => $this->get('updated'),
@@ -62,7 +67,7 @@ class User extends Model {
     $query = "SELECT id FROM users WHERE LOWER(email)='$e'";
     return mysql_num_rows(mysql_query($query)) == 1;
   }
-  
+
   public static function getUserIDByEmail($e) {
     $e = mysql_real_escape_string(mb_strtolower($e));
     $query = "SELECT id FROM users WHERE LOWER(email)='$e'";
@@ -74,19 +79,17 @@ class User extends Model {
       return false;
     }
   }
-  
-  public static function createHashAndSaltFromInput($p) {
-    $bcrypt = new Bcrypt(15);
-    $cryptArray = $bcrypt->createHashAndSaltFromInput($p);
-    $hash = $cryptArray['hash'];
-    $salt = $cryptArray['salt'];
-    return $bcrypt->verify($p, $salt, $hash) === true ? $cryptArray : false;
-  }
-  
-  public static function getHashFromInputAndSalt($p, $salt) {
-    $bcrypt = new Bcrypt(15);
-    $hash = $bcrypt->getHashFromInputAndSalt($p, $salt);
-    return $bcrypt->verifyInputAndSaltWithHash($p, $salt, $hash) === true ? $hash : false;
+
+  public static function getUserIDByUsername($u) {
+    $u = mysql_real_escape_string(mb_strtolower($u));
+    $query = "SELECT id FROM users WHERE LOWER(username)='$u'";
+    $select = mysql_query($query);
+    if(mysql_num_rows($select) > 0) {
+      $array = mysql_fetch_array($select);
+      return (int)$array[0];
+    } else {
+      return false;
+    }
   }
 
   public function validateRecord($attributes) {
@@ -107,7 +110,7 @@ class User extends Model {
       return $validation;
     }
 
-    $cryptArray = User::createHashAndSaltFromInput($attributes['password']);
+    $cryptArray = Model::createHashAndSaltFromInput($attributes['password']);
     if($cryptArray === false) {
       return "Password encryption failed.";
     }
@@ -131,37 +134,56 @@ class User extends Model {
       return $result;
     }
 
-    $this->load($result->get('id'));
+    $request = new UserRequest();
+    $result = $request->createRecord(
+      array(
+        'user_id' => $this->get('id'),
+        'type' => 'account-created',
+        'request' => ''
+      )
+    );
 
-    $email = new Email();
-    $result = $email->createRecord($this, 'register');
-    if(get_class($result) === 'Email') {
-      $email->sendMail();
+    if(get_class($result) !== $request->class) {
+      return $result;
     }
+
+    $this->load($result->get('id'));
 
     return $this;
   }
 
   public function updateRecord($attributes) {
-    $status = $attributes['status'];
+    $status = $this->get('status');
+
+    if (isset($attributes['request_id']) && isset($attributes['code'])) {
+      $request = new UserRequest($attributes['request_id']);
+      if ($request->get('status') === 'pending') {
+        $bcrypt = new Bcrypt(15);
+        if ($bcrypt->verify($attributes['code'], $request->get('salt'), $request->get('hash'))) {
+          $status = 'active';
+          $result = $request->completeRequest();
+
+          if(get_class($result) !== 'UserRequest') {
+            return $result;
+          }
+        }
+      }
+    }
 
     $result = $this->setAttributes(
-      array(
-        'status' => $attributes['status'],
-        'updated' => time(),
+      array_merge(
+        $attributes,
+        array(
+          'type' => $this->get('type'),
+          'status' => $status,
+          'updated' => time(),
+          'created' => $this->get('created'),
+        )
       )
     )->save();
 
     if(get_class($result) !== 'User') {
       return $result;
-    }
-
-    if($status !== 'approved' && $this->get('status') === 'approved') {
-      $email = new Email();
-      $result = $email->createRecord($this, 'approval');
-      if(get_class($result) === 'Email') {
-        $email->sendMail();
-      }
     }
 
     return $this;
@@ -192,5 +214,3 @@ class User extends Model {
   }
 
 }
-
-?>

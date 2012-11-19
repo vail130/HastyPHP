@@ -5,22 +5,36 @@
 CREATE TABLE users
 (
   id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  firstname       VARCHAR(100) NOT NULL,
-  lastname        VARCHAR(100) NOT NULL,
-  organization    VARCHAR(100) NOT NULL,
-  street_1        VARCHAR(100) NOT NULL,
-  street_2        VARCHAR(100) NOT NULL,
-  city            VARCHAR(100) NOT NULL,
-  state           VARCHAR(100) NOT NULL,
-  zip             VARCHAR(20) NOT NULL,
   email           VARCHAR(255) NOT NULL,
   type            VARCHAR(100) NOT NULL,
   status          VARCHAR(100) NOT NULL,
   hash            VARCHAR(255) NOT NULL,
   salt            VARCHAR(255) NOT NULL,
+  first_name      VARCHAR(100) NOT NULL,
+  last_name       VARCHAR(100) NOT NULL,
+  organization    VARCHAR(100) NOT NULL,
+  street_1        VARCHAR(100) NOT NULL,
+  street_2        VARCHAR(100) NOT NULL,
+  city            VARCHAR(100) NOT NULL,
+  state           VARCHAR(100) NOT NULL,
+  zip             VARCHAR(50) NOT NULL,
+  phone           VARCHAR(50) NOT NULL,
   updated         INT UNSIGNED NOT NULL,
   created         INT UNSIGNED NOT NULL,
   PRIMARY KEY  (id)
+);
+
+CREATE TABLE userrequests
+(
+  id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id         INT UNSIGNED NOT NULL,
+  type            VARCHAR(100) NOT NULL,
+  code            VARCHAR(255) NOT NULL,
+  request         VARCHAR(255) NOT NULL,
+  status          VARCHAR(100) NOT NULL,
+  updated         INT UNSIGNED NOT NULL,
+  created         INT UNSIGNED NOT NULL,
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE emails

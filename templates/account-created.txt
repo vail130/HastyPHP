@@ -1,0 +1,9 @@
+﻿Dear #Username#,\n
+\n
+Welcome to #SiteName#.\n
+\n
+Please follow the URL below to activate your account.\n
+\n
+#BaseURL#api/accounts/#UserID#?request_id=#RequestID#&code=#Code#\n
+\n
+Thank you!

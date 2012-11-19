@@ -45,7 +45,7 @@ class ItemTag extends Model {
     return $tags;
   }
 
-  public static function getUniqueRecords($validSession) {
+  public static function getUniqueRecords() {
     $query = "SELECT DISTINCT tag, type FROM itemtags";
     $select = mysql_query($query);
 
